@@ -1,32 +1,24 @@
-using System.Reflection;
-
 namespace HomeWork
 {
     public class Actions
     {
         public Result MethodOne()
         {
-            MethodBase methodBase = MethodBase.GetCurrentMethod();
-            Logger.WriteToLog(
-                $"Start method: {methodBase?.Name}",
-                Logger.TypeInfo);
+            Logger.Instance.Write($"Start method: {nameof(MethodOne)}", LoggerType.Info);
 
-            return new Result(true);
+            return new Result() { Status = true };
         }
 
         public Result MethodTwo()
         {
-            MethodBase methodBase = MethodBase.GetCurrentMethod();
-            Logger.WriteToLog(
-                $"Skipped logic in method: {methodBase?.Name}",
-                Logger.TypeWarning);
+            Logger.Instance.Write($"Skipped logic in method: {nameof(MethodTwo)}", LoggerType.Warning);
 
-            return new Result(true);
+            return new Result() { Status = true };
         }
 
         public Result MethodBob()
         {
-            return new Result(false, "I broke a logic");
+            return new Result() { Message = "I broke a logic" };
         }
     }
 }

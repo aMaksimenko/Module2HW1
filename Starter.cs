@@ -1,46 +1,42 @@
 using System;
+using System.IO;
 
 namespace HomeWork
 {
     public class Starter
     {
-        private int _countCycles = 100;
-        private int _countMethods = 3;
+        private const int CountCycles = 100;
+        private const int CountMethods = 3;
+        private readonly Random _random = new Random();
+        private readonly Actions _actions = new Actions();
 
         public void Run()
         {
-            Random random = new Random();
-            Actions actions = new Actions();
-
-            for (int i = 0; i < _countCycles; i++)
+            for (var i = 0; i < CountCycles; i++)
             {
-                int nextMethodIndex = random.Next(_countMethods);
-                Result result;
+                var nextMethodIndex = _random.Next(CountMethods);
+                Result result = null;
 
                 switch (nextMethodIndex)
                 {
                     case 0:
-                        result = actions.MethodOne();
+                        result = _actions.MethodOne();
                         break;
                     case 1:
-                        result = actions.MethodTwo();
+                        result = _actions.MethodTwo();
                         break;
                     case 2:
-                        result = actions.MethodBob();
+                        result = _actions.MethodBob();
                         break;
-                    default:
-                        return;
                 }
 
-                if (!result.Status)
+                if (result != null && !result.Status)
                 {
-                    Logger.WriteToLog(
-                        $"Action failed by a reason: {result.Message}",
-                        Logger.TypeError);
+                    Logger.Instance.Write($"Action failed by a reason: {result.Message}", LoggerType.Error);
                 }
             }
 
-            Logger.SaveToFile();
+            File.WriteAllText("log.txt", Logger.Instance.Log);
         }
     }
 }

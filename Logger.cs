@@ -1,16 +1,12 @@
 using System;
-using System.IO;
 using System.Text;
 
 namespace HomeWork
 {
     public class Logger
     {
-        private static Logger _instance = new Logger();
-        private static StringBuilder _stringBuilder = new StringBuilder();
-        private static string _typeError = "Error";
-        private static string _typeInfo = "Info";
-        private static string _typeWarning = "Warning";
+        private static readonly Logger InstanceValue = new Logger();
+        private readonly StringBuilder _stringBuilder = new StringBuilder();
 
         static Logger()
         {
@@ -20,26 +16,15 @@ namespace HomeWork
         {
         }
 
-        public static Logger Instance => _instance;
-        public static string TypeError => _typeError;
-        public static string TypeInfo => _typeInfo;
-        public static string TypeWarning => _typeWarning;
+        public static Logger Instance => InstanceValue;
+        public string Log => _stringBuilder.ToString();
 
-        public static void WriteToLog(string message, string type)
+        public void Write(string message, LoggerType type)
         {
-            string result = $"{DateTime.Now}: {type}: {message}";
+            var result = $"{DateTime.UtcNow}: {type}: {message}";
 
             Console.WriteLine(result);
             _stringBuilder.AppendLine(result);
-        }
-
-        public static void SaveToFile()
-        {
-            string dateTimeString = DateTime.Now.ToString("yyyy'-'MM'-'dd'-'HH'-'mm'-'ss");
-
-            File.WriteAllText(
-                $"../../../log-{dateTimeString}.txt",
-                _stringBuilder.ToString());
         }
     }
 }
